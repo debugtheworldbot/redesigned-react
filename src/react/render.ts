@@ -2,11 +2,12 @@ export const render = (element: VElement, container: HTMLElement) => {
     const dom = element.type === "TEXT_ELEMENT" ?
         document.createTextNode('') : document.createElement(element.type)
 
-    const isProperty = (key: string) => key !== 'children'
-
+    const isProperty = (key: EleKeys) => key !== 'children'
     Object.keys(element.props)
+        // @ts-ignore
         .filter(isProperty)
-        .forEach((key: any) => {
+        // @ts-ignore
+        .forEach((key: EleKeys) => {
             // @ts-ignore
             dom[key] = element.props[key]
         })

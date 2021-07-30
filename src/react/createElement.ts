@@ -1,4 +1,4 @@
-export const createElement = (type: string, props?: Partial<HTMLProps>, ...children: Child[]): VElement => {
+const createElement = (type: string, props?: Partial<HTMLProps>, ...children: Child[]): VElement => {
     return {
         type,
         props: {
@@ -19,3 +19,11 @@ const createTextElement = (text: string): VElement => {
         }
     }
 }
+
+const createDom = (fiber: VElement) => {
+    const dom = fiber.type === 'TEXT_ELEMENT' ?
+        document.createTextNode('') : document.createElement(fiber.type)
+    return dom
+}
+
+export { createElement, createDom }
