@@ -1,10 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
+import { createElement } from './react/createElement'
+import { render } from './react/render'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+const ele = createElement('div',{innerText:'hi div'}) 
+render(ele,document.getElementById('root')!)
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// )

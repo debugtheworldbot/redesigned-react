@@ -1,4 +1,4 @@
-export const createElement = (type: string, props: any[], ...children: Child[]): VElement => {
+export const createElement = (type: string, props?: Partial<HTMLProps>, ...children: Child[]): VElement => {
     return {
         type,
         props: {
