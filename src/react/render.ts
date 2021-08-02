@@ -1,3 +1,4 @@
+type EleKeys = keyof HTMLProps
 type OmitChildren = keyof Omit<HTMLProps, 'children'>
 export const render = (element: VElement, container: HTMLElement) => {
     const dom = element.type === "TEXT_ELEMENT" ?

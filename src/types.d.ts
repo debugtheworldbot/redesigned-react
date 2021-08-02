@@ -1,13 +1,16 @@
 interface VElement {
     type: string | 'TEXT_ELEMENT'
-    props: Partial<HTMLProps>
-    dom?: HTMLElement | Text
+    props: HTMLProps
+
+    dom?: HTMLElement | Text | null
+    parent?: VElement
+    child?: VElement
+    sibling?: VElement
 }
-interface HTMLProps extends Omit<HTMLElement | Text, 'children'> {
-    nodeValue: string | null
+interface HTMLProps extends Partial<Omit<HTMLElement | Text, 'children'>> {
+    nodeValue?: string | null
     children: VElement[]
 }
-type EleKeys = keyof HTMLProps
 
 interface TimeRemaining {
     timeRemaining: () => number
