@@ -1,12 +1,19 @@
 import { createDom } from "./createElement"
 
-let nextUnitOfWork: VElement | null = null
+type Fiber = VElement | null
+let nextUnitOfWork: Fiber = null
+// work in progress root
+let wipRoot: Fiber = null
 export const workLoop = (deadline: TimeRemaining) => {
+    console.log('loop');
+
     let shouldYeild = false
     while (!!nextUnitOfWork && !shouldYeild) {
         nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
-
         shouldYeild = deadline.timeRemaining() < 1
+    }
+    if (!nextUnitOfWork && wipRoot) {
+        commitRoot()
     }
     window.requestIdleCallback(workLoop)
 }
@@ -54,4 +61,7 @@ const performUnitOfWork = (fiber: VElement) => {
         nextFiber = nextFiber.parent!
     }
     return null
+}
+
+const commitRoot = () => {
 }

@@ -15,7 +15,3 @@ interface HTMLProps extends Partial<Omit<HTMLElement | Text, 'children'>> {
 interface TimeRemaining {
     timeRemaining: () => number
 }
-
-interface Fiber {
-    dom: HTMLElement
-}

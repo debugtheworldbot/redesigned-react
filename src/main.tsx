@@ -1,18 +1,17 @@
+import React from "react";
 import { createElement } from "./react/createElement";
 import { render } from "./react/render";
 import { workLoop } from "./react/workLoop";
 
-const ele = createElement(
-  "div",
-  { innerText: "hi div" },
-  createElement("TEXT_ELEMENT", { nodeValue: "children" })
-);
 window.requestIdleCallback(workLoop);
+/** @jsx createElement */
+const Counter = (
+  <div>
+    <h1>hi</h1>
+    <div>children1</div>
+    <div>children2</div>
+  </div>
+);
 
-render(ele, document.getElementById("root")!);
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// )
+const container = document.getElementById("root");
+render(Counter, container!);
