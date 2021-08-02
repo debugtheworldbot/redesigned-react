@@ -1,4 +1,4 @@
-const createElement = (type: string, props?: Partial<HTMLProps>, ...children: Child[]): VElement => {
+const createElement = (type: string, props: Partial<HTMLElement>, ...children: VElement[]): VElement => {
     return {
         type,
         props: {
