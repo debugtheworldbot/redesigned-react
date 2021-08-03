@@ -25,9 +25,10 @@ const performUnitOfWork = (fiber: VElement) => {
     if (!fiber.dom) {
         fiber.dom = createDom(fiber)
     }
-    if (fiber.parent) {
-        fiber.parent.dom?.appendChild(fiber.dom)
-    }
+    // 为了防止渲染出不完整的ui，需要在整个tree完成后再渲染
+    // if (fiber.parent) {
+    //     fiber.parent.dom?.appendChild(fiber.dom)
+    // }
 
     const elements = fiber.props.children
     let index = 0
@@ -64,13 +65,23 @@ const performUnitOfWork = (fiber: VElement) => {
 }
 
 export const render = (element: VElement, container: HTMLElement) => {
-    nextUnitOfWork = {
+    wipRoot = {
         dom: container,
         props: {
             children: [element]
         }
     }
+    nextUnitOfWork = wipRoot
 }
 
 const commitRoot = () => {
+    commitWork(wipRoot?.child!)
+    wipRoot = null
+}
+const commitWork = (fiber?: Fiber) => {
+    if (!fiber) return
+    const domParent = fiber.parent?.dom
+    domParent?.appendChild(fiber.dom!)
+    commitWork(fiber.child)
+    commitWork(fiber.sibling)
 }
