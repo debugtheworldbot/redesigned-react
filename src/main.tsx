@@ -1,7 +1,6 @@
 import React from "react";
 import { createElement } from "./react/createElement";
-import { render } from "./react/render";
-import { workLoop } from "./react/workLoop";
+import { render, workLoop } from "./react/workLoop";
 
 window.requestIdleCallback(workLoop);
 /** @jsx createElement */

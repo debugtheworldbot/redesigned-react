@@ -1,5 +1,5 @@
 interface VElement {
-    type: string | 'TEXT_ELEMENT'
+    type?: string | 'TEXT_ELEMENT'
     props: HTMLProps
 
     dom?: HTMLElement | Text | null

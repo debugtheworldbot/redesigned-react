@@ -63,5 +63,14 @@ const performUnitOfWork = (fiber: VElement) => {
     return null
 }
 
+export const render = (element: VElement, container: HTMLElement) => {
+    nextUnitOfWork = {
+        dom: container,
+        props: {
+            children: [element]
+        }
+    }
+}
+
 const commitRoot = () => {
 }
