@@ -6,6 +6,7 @@ interface VElement {
     parent?: VElement
     child?: VElement
     sibling?: VElement
+    alternate?: VElement | null
 }
 interface HTMLProps extends Partial<Omit<HTMLElement | Text, 'children'>> {
     nodeValue?: string | null

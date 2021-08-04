@@ -4,9 +4,9 @@ type Fiber = VElement | null
 let nextUnitOfWork: Fiber = null
 // work in progress root
 let wipRoot: Fiber = null
+let currentRoot: Fiber = null
 export const workLoop = (deadline: TimeRemaining) => {
     console.log('loop');
-
     let shouldYeild = false
     while (!!nextUnitOfWork && !shouldYeild) {
         nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
@@ -69,13 +69,15 @@ export const render = (element: VElement, container: HTMLElement) => {
         dom: container,
         props: {
             children: [element]
-        }
+        },
+        alternate: currentRoot
     }
     nextUnitOfWork = wipRoot
 }
 
 const commitRoot = () => {
     commitWork(wipRoot?.child!)
+    currentRoot = wipRoot
     wipRoot = null
 }
 const commitWork = (fiber?: Fiber) => {
