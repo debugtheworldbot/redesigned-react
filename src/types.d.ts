@@ -3,9 +3,9 @@ interface VElement {
     props: HTMLProps
 
     dom?: HTMLElement | Text | null
-    parent?: VElement
-    child?: VElement
-    sibling?: VElement
+    parent?: VElement | null
+    child?: VElement | null
+    sibling?: VElement | null
     alternate?: VElement | null
 }
 interface HTMLProps extends Partial<Omit<HTMLElement | Text, 'children'>> {

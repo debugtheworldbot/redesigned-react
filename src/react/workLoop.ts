@@ -31,6 +31,20 @@ const performUnitOfWork = (fiber: VElement) => {
     // }
 
     const elements = fiber.props.children
+    reconcileChildren(fiber, elements)
+
+    if (fiber.child) return fiber.child
+
+    let nextFiber = fiber
+    // if sibling exists,return;else return parent
+    while (nextFiber) {
+        if (nextFiber.sibling) return nextFiber.sibling
+        nextFiber = nextFiber.parent!
+    }
+    return null
+}
+const reconcileChildren = (fiber: Fiber, elements: VElement[]) => {
+    if (!fiber) return
     let index = 0
     let preSibling: VElement | null = null
 
@@ -52,16 +66,6 @@ const performUnitOfWork = (fiber: VElement) => {
         preSibling = newFiber
         index++
     }
-
-    if (fiber.child) return fiber.child
-
-    let nextFiber = fiber
-    // if sibling exists,return;else return parent
-    while (nextFiber) {
-        if (nextFiber.sibling) return nextFiber.sibling
-        nextFiber = nextFiber.parent!
-    }
-    return null
 }
 
 export const render = (element: VElement, container: HTMLElement) => {
