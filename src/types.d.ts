@@ -7,6 +7,7 @@ interface VElement {
     child?: VElement | null
     sibling?: VElement | null
     alternate?: VElement | null
+    effectTag?: 'UPDATE' | 'PLACEMENT' | 'DELETION'
 }
 interface HTMLProps extends Partial<Omit<HTMLElement | Text, 'children'>> {
     nodeValue?: string | null

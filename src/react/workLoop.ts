@@ -1,12 +1,13 @@
 import { createDom } from "./createElement"
+import { updateDom } from "./updateDom"
 
 type Fiber = VElement | null
 let nextUnitOfWork: Fiber = null
 // work in progress root
 let wipRoot: Fiber = null
 let currentRoot: Fiber = null
+let deletions: VElement[] | null = null
 export const workLoop = (deadline: TimeRemaining) => {
-    console.log('loop');
     let shouldYeild = false
     while (!!nextUnitOfWork && !shouldYeild) {
         nextUnitOfWork = performUnitOfWork(nextUnitOfWork)
@@ -44,20 +45,47 @@ const performUnitOfWork = (fiber: VElement) => {
     return null
 }
 const reconcileChildren = (fiber: Fiber, elements: VElement[]) => {
+
     if (!fiber) return
     let index = 0
+    let oldFiber = fiber.alternate?.child
     let preSibling: VElement | null = null
 
-    while (index < elements?.length) {
+    while (index < elements?.length || !!oldFiber) {
         const element = elements[index]
 
-        const newFiber: VElement = {
-            type: element.type,
-            props: element.props,
-            parent: fiber,
-            dom: null
-        }
+        const sameType = oldFiber && element && element.type === oldFiber.type
 
+        let newFiber: VElement | null = null
+        if (sameType) {
+            // update node
+            newFiber = {
+                type: oldFiber!.type,
+                props: element.props,
+                dom: oldFiber?.dom,
+                parent: fiber,
+                alternate: oldFiber,
+                effectTag: 'UPDATE'
+            }
+
+        } else if (!sameType && element) {
+            // add
+            newFiber = {
+                type: element.type,
+                props: element.props,
+                dom: null,
+                parent: fiber,
+                alternate: null,
+                effectTag: 'PLACEMENT'
+            }
+        } else {
+            // remove
+            oldFiber!.effectTag = 'DELETION'
+            deletions!.push(oldFiber!)
+        }
+        if (oldFiber) {
+            oldFiber = oldFiber.sibling
+        }
         if (index === 0) {
             fiber.child = newFiber
         } else {
@@ -76,10 +104,12 @@ export const render = (element: VElement, container: HTMLElement) => {
         },
         alternate: currentRoot
     }
+    deletions = []
     nextUnitOfWork = wipRoot
 }
 
 const commitRoot = () => {
+    deletions?.forEach(d => commitWork(d))
     commitWork(wipRoot?.child!)
     currentRoot = wipRoot
     wipRoot = null
@@ -87,7 +117,19 @@ const commitRoot = () => {
 const commitWork = (fiber?: Fiber) => {
     if (!fiber) return
     const domParent = fiber.parent?.dom
-    domParent?.appendChild(fiber.dom!)
+    if (fiber.effectTag === 'PLACEMENT' && !!fiber.dom) {
+        domParent?.appendChild(fiber.dom)
+    } else if (fiber.effectTag === 'UPDATE' && !!fiber.dom) {
+        updateDom(
+            fiber.dom,
+            fiber.alternate?.props!,
+            fiber.props
+        )
+
+    }
+    else if (fiber.effectTag === 'DELETION') {
+        domParent?.removeChild(fiber.dom!)
+    }
     commitWork(fiber.child)
     commitWork(fiber.sibling)
 }

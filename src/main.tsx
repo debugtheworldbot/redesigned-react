@@ -4,13 +4,20 @@ import { render, workLoop } from "./react/workLoop";
 
 window.requestIdleCallback(workLoop);
 /** @jsx createElement */
-const Counter = (
-  <div>
-    <h1>hi</h1>
-    <div>children1</div>
-    <div>children2</div>
-  </div>
-);
-
 const container = document.getElementById("root");
-render(Counter, container!);
+
+const updateValue = (e: any) => {
+  rerender(e.target.value);
+};
+
+const rerender = (value: string) => {
+  const element = (
+    <div>
+      <input onChange={updateValue} value={value} />
+      <h2>Hello {value}</h2>
+    </div>
+  );
+  render(element, container!);
+};
+
+rerender("world");
