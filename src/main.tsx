@@ -13,7 +13,7 @@ const updateValue = (e: any) => {
 const rerender = (value: string) => {
   const element = (
     <div>
-      <input onChange={updateValue} value={value} />
+      <input onInput={updateValue} value={value} />
       <h2>Hello {value}</h2>
     </div>
   );

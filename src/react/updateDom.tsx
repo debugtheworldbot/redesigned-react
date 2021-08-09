@@ -1,15 +1,15 @@
-const isNew = (prev: HTMLProps, next: HTMLProps) => (key: string) =>
+const isNew = (prev: HTMLProps | {}, next: HTMLProps) => (key: string) =>
   // @ts-ignore
   prev[key] !== next[key];
-const isGone = (prev: HTMLProps, next: HTMLProps) => (key: string) =>
+const isGone = (prev: HTMLProps | {}, next: HTMLProps) => (key: string) =>
   !(key in next);
 const isEvent = (key: string) => key.startsWith("on");
 const isProperty = (key: string) => key !== "children" && !isEvent(key);
 
 export const updateDom = (
   dom: HTMLElement | Text,
-  prevProps: HTMLProps,
-  nextProps: HTMLProps
+  prevProps: HTMLProps | {},
+  nextProps: HTMLProps,
 ) => {
   // Remove old properties
   Object.keys(prevProps)

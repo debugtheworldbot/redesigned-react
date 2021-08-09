@@ -1,3 +1,5 @@
+import { updateDom } from "./updateDom"
+
 type EleKeys = keyof HTMLProps
 type OmitChildren = keyof Omit<HTMLProps, 'children'>
 const createElement = (type: string, props: Partial<HTMLElement>, ...children: VElement[]): VElement => {
@@ -25,13 +27,7 @@ const createTextElement = (text: string): VElement => {
 const createDom = (fiber: VElement) => {
     const dom = fiber.type === 'TEXT_ELEMENT' ?
         document.createTextNode('') : document.createElement(fiber.type!)
-    const isProperty = (key: EleKeys) => key !== 'children'
-    const keys = Object.keys(fiber.props) as EleKeys[]
-    (keys.filter(isProperty) as OmitChildren[])
-        .forEach((key: OmitChildren) => {
-            // @ts-ignore
-            dom[key] = fiber.props[key]
-        })
+    updateDom(dom, {}, fiber.props)
     return dom
 }
 
