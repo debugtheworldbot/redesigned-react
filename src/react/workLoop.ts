@@ -162,7 +162,7 @@ export const useState = <T>(initial: T): [T, Function] => {
         queue: []
     }
     const actions = oldHook ? oldHook.queue : []
-    actions.forEach(action => hook.state = action(hook.state))
+    actions.forEach(action => hook.state = action instanceof Function ? action(hook.state) : action)
     const setState = (action: Function) => {
         hook.queue.push(action)
         wipRoot = {

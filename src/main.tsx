@@ -7,7 +7,19 @@ window.requestIdleCallback(workLoop);
 const container = document.getElementById("root");
 function Counter() {
   const [state, setState] = useState(1);
-  return <h1 onClick={() => setState((c: number) => c + 1)}>Count: {state}</h1>;
+  const todos = [{ title: "todo1" }, { title: "todo2" }];
+  return (
+    <div>
+      <h1 onClick={() => setState((c: number) => c + 1)}>Count: {state}</h1>
+      <h1 onClick={() => setState(2)}>Count: {state}</h1>
+
+      <ul>
+        {todos.map((todo) => (
+          <li>{todo.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 const element = <Counter />;
 render(element, container!);

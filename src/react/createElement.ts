@@ -7,9 +7,11 @@ const createElement = (type: string, props: Partial<HTMLElement>, ...children: V
         type,
         props: {
             ...props,
-            children: children.map(c =>
-                typeof c === 'object' ? c : createTextElement(c)
-            )
+            children: children
+                .flat()
+                .map(c =>
+                    typeof c === 'object' ? c : createTextElement(c)
+                )
         }
     }
 }
@@ -26,7 +28,7 @@ const createTextElement = (text: string): VElement => {
 
 const createDom = (fiber: VElement) => {
     const dom = fiber.type === 'TEXT_ELEMENT' ?
-        document.createTextNode('') : document.createElement(fiber.type!)
+        document.createTextNode('') : document.createElement(fiber.type as string)
     updateDom(dom, {}, fiber.props)
     return dom
 }
