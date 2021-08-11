@@ -18,21 +18,28 @@ export const workLoop = (deadline: TimeRemaining) => {
     }
     window.requestIdleCallback(workLoop)
 }
+const updateHostComponent = (fiber: VElement) => {
+    if (!fiber.dom) {
+        fiber.dom = createDom(fiber)
+    }
+    const elements = fiber.props.children
+    reconcileChildren(fiber, elements)
+}
+const updateFucComponent = (fiber: VElement) => {
+    const children = [(fiber.type as Function)(fiber.props)]
+
+    reconcileChildren(fiber, children)
+}
 const performUnitOfWork = (fiber: VElement) => {
     //把元素添加到 dom 中
     //为元素的子元素都创建一个 fiber 结构
     //找到下一个工作单元
-
-    if (!fiber.dom) {
-        fiber.dom = createDom(fiber)
+    const isFucComponent = fiber.type instanceof Function
+    if (isFucComponent) {
+        updateFucComponent(fiber)
+    } else {
+        updateHostComponent(fiber)
     }
-    // 为了防止渲染出不完整的ui，需要在整个tree完成后再渲染
-    // if (fiber.parent) {
-    //     fiber.parent.dom?.appendChild(fiber.dom)
-    // }
-
-    const elements = fiber.props.children
-    reconcileChildren(fiber, elements)
 
     if (fiber.child) return fiber.child
 
@@ -116,7 +123,11 @@ const commitRoot = () => {
 }
 const commitWork = (fiber?: Fiber) => {
     if (!fiber) return
-    const domParent = fiber.parent?.dom
+    let domParentFiber = fiber.parent
+    while (!domParentFiber?.dom) {
+        domParentFiber = domParentFiber?.parent
+    }
+    const domParent = domParentFiber?.dom
     if (fiber.effectTag === 'PLACEMENT' && !!fiber.dom) {
         domParent?.appendChild(fiber.dom)
     } else if (fiber.effectTag === 'UPDATE' && !!fiber.dom) {
@@ -128,7 +139,11 @@ const commitWork = (fiber?: Fiber) => {
 
     }
     else if (fiber.effectTag === 'DELETION') {
-        domParent?.removeChild(fiber.dom!)
+        let child = fiber
+        while (!child?.dom) {
+            child = fiber.child!
+        }
+        domParent?.removeChild(child.dom!)
     }
     commitWork(fiber.child)
     commitWork(fiber.sibling)
