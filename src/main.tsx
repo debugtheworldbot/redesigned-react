@@ -1,14 +1,15 @@
 import React from "react";
 import { createElement } from "./react/createElement";
-import { render, workLoop } from "./react/workLoop";
+import { render, workLoop, useState } from "./react/workLoop";
 
 window.requestIdleCallback(workLoop);
 /** @jsx createElement */
 const container = document.getElementById("root");
-function App(props: { name: string }) {
-  return <h1>Hi {props.name}</h1>;
+function Counter() {
+  const [state, setState] = useState(1);
+  return <h1 onClick={() => setState((c: number) => c + 1)}>Count: {state}</h1>;
 }
-const element = <App name="foo" />;
+const element = <Counter />;
 render(element, container!);
 
 // const updateValue = (e: any) => {

@@ -18,18 +18,7 @@ export const workLoop = (deadline: TimeRemaining) => {
     }
     window.requestIdleCallback(workLoop)
 }
-const updateHostComponent = (fiber: VElement) => {
-    if (!fiber.dom) {
-        fiber.dom = createDom(fiber)
-    }
-    const elements = fiber.props.children
-    reconcileChildren(fiber, elements)
-}
-const updateFucComponent = (fiber: VElement) => {
-    const children = [(fiber.type as Function)(fiber.props)]
 
-    reconcileChildren(fiber, children)
-}
 const performUnitOfWork = (fiber: VElement) => {
     //把元素添加到 dom 中
     //为元素的子元素都创建一个 fiber 结构
@@ -147,4 +136,46 @@ const commitWork = (fiber?: Fiber) => {
     }
     commitWork(fiber.child)
     commitWork(fiber.sibling)
+}
+const updateHostComponent = (fiber: VElement) => {
+    if (!fiber.dom) {
+        fiber.dom = createDom(fiber)
+    }
+    const elements = fiber.props.children
+    reconcileChildren(fiber, elements)
+}
+let wipFiber: VElement
+let hookIndex: number = -1
+
+const updateFucComponent = (fiber: VElement) => {
+    wipFiber = fiber
+    hookIndex = 0
+    wipFiber.hooks = []
+    const children = [(fiber.type as Function)(fiber.props)]
+
+    reconcileChildren(fiber, children)
+}
+export const useState = <T>(initial: T): [T, Function] => {
+    const oldHook = wipFiber?.alternate?.hooks![hookIndex]
+    const hook: { state: T, queue: Function[] } = {
+        state: oldHook ? oldHook.state : initial,
+        queue: []
+    }
+    const actions = oldHook ? oldHook.queue : []
+    actions.forEach(action => hook.state = action(hook.state))
+    const setState = (action: Function) => {
+        hook.queue.push(action)
+        wipRoot = {
+            dom: currentRoot?.dom,
+            props: currentRoot?.props!,
+            alternate: currentRoot
+        }
+        nextUnitOfWork = wipRoot
+        deletions = []
+    }
+    wipFiber.hooks?.push(hook)
+    hookIndex++
+
+    return [hook.state, setState]
+
 }

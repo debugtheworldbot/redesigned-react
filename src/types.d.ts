@@ -8,6 +8,10 @@ interface VElement {
     sibling?: VElement | null
     alternate?: VElement | null
     effectTag?: 'UPDATE' | 'PLACEMENT' | 'DELETION'
+    hooks?: {
+        state: any
+        queue: Function[]
+    }[]
 }
 interface HTMLProps extends Partial<Omit<HTMLElement | Text, 'children'>> {
     nodeValue?: string | null
