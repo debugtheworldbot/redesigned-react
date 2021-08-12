@@ -54,6 +54,7 @@ const reconcileChildren = (fiber: Fiber, elements: VElement[]) => {
 
         let newFiber: VElement | null = null
         if (sameType) {
+
             // update node
             newFiber = {
                 type: oldFiber!.type,
@@ -118,6 +119,7 @@ const commitWork = (fiber?: Fiber) => {
     }
     const domParent = domParentFiber?.dom
     if (fiber.effectTag === 'PLACEMENT' && !!fiber.dom) {
+        console.log(fiber.type);
         domParent?.appendChild(fiber.dom)
     } else if (fiber.effectTag === 'UPDATE' && !!fiber.dom) {
         updateDom(
