@@ -11,14 +11,6 @@ function Counter() {
   const [input, setInput] = useState("");
   const todos = [{ title: "todo1" }, { title: "todo2" }];
 
-  function Element() {
-    return (
-      <div>
-        <h1 onClick={() => setCount((c: number) => c - 1)}>Count: {count}</h1>
-      </div>
-    );
-  }
-
   return (
     <div>
       <h1 onClick={() => setState((c: number) => c + 1)}>Count: {state}</h1>
@@ -31,7 +23,6 @@ function Counter() {
           <li>{todo.title}</li>
         ))}
       </ul>
-      <Element />
     </div>
   );
 }

@@ -119,7 +119,6 @@ const commitWork = (fiber?: Fiber) => {
     }
     const domParent = domParentFiber?.dom
     if (fiber.effectTag === 'PLACEMENT' && !!fiber.dom) {
-        console.log(fiber.type);
         domParent?.appendChild(fiber.dom)
     } else if (fiber.effectTag === 'UPDATE' && !!fiber.dom) {
         updateDom(
@@ -154,7 +153,6 @@ const updateFucComponent = (fiber: VElement) => {
     hookIndex = 0
     wipFiber.hooks = []
     const children = [(fiber.type as Function)(fiber.props)]
-
     reconcileChildren(fiber, children)
 }
 export const useState = <T>(initial: T): [T, Function] => {
