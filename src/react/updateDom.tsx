@@ -9,7 +9,7 @@ const isProperty = (key: string) => key !== "children" && !isEvent(key);
 export const updateDom = (
   dom: HTMLElement | Text,
   prevProps: HTMLProps | {},
-  nextProps: HTMLProps,
+  nextProps: HTMLProps
 ) => {
   // Remove old properties
   Object.keys(prevProps)
