@@ -8,26 +8,26 @@ const container = document.getElementById("root");
 function Counter() {
   const [state, setState] = useState(1);
   const [input, setInput] = useState("");
-  const todos = [{ title: "todo1" }, { title: "todo2" }];
+  const todos = [...Array(state)];
 
   return (
     <div>
-      <button onClick={() => setState((c: number) => c - 1)}>-</button>
+      <h1>array list</h1>
+      <button onClick={() => setState((c: number) => (c > 1 ? c - 1 : 1))}>
+        -
+      </button>
       <span>Count: {state}</span>
       <button onClick={() => setState((c: number) => c + 1)}>+</button>
-      <button onClick={() => setState(1)}>reset</button>
+      <ul>
+        {todos.map((_, i) => (
+          <li>list{i}</li>
+        ))}
+      </ul>
       <hr />
       <div>
         <input onInput={(e) => setInput(e.currentTarget.value)} value={input} />
         <h1>hello {input}</h1>
       </div>
-      <hr />
-      <h1>array list</h1>
-      <ul>
-        {todos.map((todo) => (
-          <li>{todo.title}</li>
-        ))}
-      </ul>
     </div>
   );
 }

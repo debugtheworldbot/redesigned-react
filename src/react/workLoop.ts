@@ -75,6 +75,7 @@ const reconcileChildren = (fiber: Fiber, elements: VElement[]) => {
                 alternate: null,
                 effectTag: 'PLACEMENT'
             }
+
         } else {
             // remove
             oldFiber!.effectTag = 'DELETION'
