@@ -13,11 +13,17 @@ function Counter() {
 
   return (
     <div>
-      <h1 onClick={() => setState((c: number) => c + 1)}>Count: {state}</h1>
-      <h1 onClick={() => setCount((c: number) => c - 1)}>Count: {count}</h1>
+      <button onClick={() => setState((c: number) => c - 1)}>-</button>
+      <span>Count: {state}</span>
+      <button onClick={() => setState((c: number) => c + 1)}>+</button>
       <button onClick={() => setState(1)}>reset</button>
-      <input onInput={(e) => setInput(e.currentTarget.value)} value={input} />
-
+      <hr />
+      <div>
+        <input onInput={(e) => setInput(e.currentTarget.value)} value={input} />
+        <h1>hello {input}</h1>
+      </div>
+      <hr />
+      <h1>array list</h1>
       <ul>
         {todos.map((todo) => (
           <li>{todo.title}</li>
