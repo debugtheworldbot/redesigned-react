@@ -7,7 +7,6 @@ window.requestIdleCallback(workLoop);
 const container = document.getElementById("root");
 function Counter() {
   const [state, setState] = useState(1);
-  const [count, setCount] = useState(10);
   const [input, setInput] = useState("");
   const todos = [{ title: "todo1" }, { title: "todo2" }];
 
