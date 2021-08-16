@@ -11,5 +11,7 @@ cd dist
 # 如果你要部署到自定义域名
 # echo 'www.example.com' > CNAME
 
+git add .
+git commit -m 'deploy'
 git push -f origin master
 cd -
